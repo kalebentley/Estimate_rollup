@@ -66,7 +66,7 @@
     waterbody_name_rollup <-c("Lewis River")
     ContactAgency_rollup <- c("Washington Department of Fish and Wildlife")
     BestValue_rollup <- c("Yes")
-    ProtMethDoc_rollup <-c("TBD")
+    ProtMethDoc_rollup <-c("https://github.com/kalebentley/Estimate_rollup")
     ContactPerFirst_rollup<-c("Kale")
     ContactPerLast_rollup<-c("Bentley")
     ContactPerPhone_rollup<-c("303-550-3004")
