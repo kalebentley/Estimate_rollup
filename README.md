@@ -1,4 +1,4 @@
-# Estiamte Rollup
+# Estimate Rollup (As of August 2nd, 2024, the content below needs to be reviewed and updated)
 Background:
 This analysis is designed to combine independently produced estimates of abundance and generate a rollup estimate of abundance and, if desired, pHOS and pAge
 The analysis was specifically built to generate an annual rollup, population-level estimate for Lewis Basin tule fall Chinook by origin (hatchery, wild).  However, the analysis is agnostic to the specific populations/groupings.
