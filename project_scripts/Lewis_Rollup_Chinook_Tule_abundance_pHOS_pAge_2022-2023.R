@@ -2,7 +2,7 @@
 # Generate roll-up estimates for Lewis Basin tule Chinook (i.e., combining independent estimates from NF Lewis, EF Lewis, and Cedar Creek
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Code developed by Kale Bentley
-# Updated: Aug 2, 2024
+# Updated: Aug 5, 2024
 
 #---------------------------------------------------------------------------------------------------------- -
 # Load functions and packages                                                 ----
@@ -26,13 +26,13 @@
       ## NOTE file must be stored as a .csv and file name must include the .csv suffix
 
 #---------------------------------------------------------------------------------------------------------- -
-# IMPORT DATA                                                                                        ----
+# Import data                                                                                            ----
 #---------------------------------------------------------------------------------------------------------- -  
   dat<-import_data(loc = loc_data_files, wd = wd_data_files, file_name=file_name) # Import data
   dat %>% tibble  # Preview imported data   
 
 #---------------------------------------------------------------------------------------------------------- -
-# GENERATE ROLLED-UP ESTIMATES OF ABUNDANCE USING LOG-NORMAL MOMEMENT MATCHING     ----
+# Generate rollup/combined estimates of abundance using log-normal moment matching                       ----
 #---------------------------------------------------------------------------------------------------------- -
 # Step 1: Specify which data columns/fields to summarize estimates of abundance
   summary_cols <- c("SpawningYear", "CommonPopName", "Param") #typically, you should enter: c("SpawningYear", "CommonPopName", "Param")
