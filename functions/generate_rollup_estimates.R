@@ -80,8 +80,9 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
   }
   
   if ("pAge" %in% add_param) {
-    age_summary <- 
+    age_total_byYearParam <- 
       data %>%
+      filter(Age == "Total") |> 
       group_by(across(all_of(summary_cols))) %>%
       summarize(total_mean = sum(mean, na.rm = TRUE), .groups = 'drop')
     
@@ -90,7 +91,7 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
       filter(Age != "Total") %>%
       group_by(across(all_of(c(summary_cols, "Age")))) %>%
       summarize(mean_age = sum(mean, na.rm = TRUE), .groups = 'drop') %>%
-      left_join(age_summary, by = summary_cols) %>%
+      left_join(age_total_byYearParam, by = summary_cols) %>%
       mutate(Mean = mean_age / total_mean, 
              Param = paste(Param, paste0("Age", Age, "Prop"), sep = "_"),
              Age = NA
