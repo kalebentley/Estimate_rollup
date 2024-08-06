@@ -51,7 +51,7 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
     select(any_of(group_cols), Mean, SD, l95, Median, u95, CV)
   
   if ("pHOS" %in% add_param) {
-    hos_data <- data %>% filter(str_detect(Param, "HOS"))
+    hos_data <- data %>% filter(str_detect(Param, "HOS") & Age == "Total")
     tsa_data <- data %>% filter(str_detect(Param, "TSA"))
     
     pHOS_summary <- 
@@ -67,7 +67,7 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
       ) %>%
       #mutate(Mean = mean_hos / mean_tsa, Param = "pHOS") %>%
       mutate(
-        Mean = mean_hos + mean_tsa,
+        Mean = mean_hos / mean_tsa,
         Param = case_when(
           str_detect(Param, "EJ|ej") ~ "pHOSej",
           str_detect(Param, "IJ|ij") ~ "pHOSij",
