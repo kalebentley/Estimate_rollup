@@ -28,8 +28,14 @@
 #---------------------------------------------------------------------------------------------------------- -
 # Import data                                                                                            ----
 #---------------------------------------------------------------------------------------------------------- -  
-  dat<-import_data(loc = loc_data_files, wd = wd_data_files, file_name=file_name) # Import data
-  dat %>% tibble  # Preview imported data   
+  # Import
+    dat<-import_data(loc = loc_data_files, wd = wd_data_files, file_name=file_name) # Import data
+  
+  # Preview data set
+    dat %>% tibble  
+    colnames(dat)
+    dat |> group_by(SpawningYear, CommonPopName) |> count(WaterBody) |> pivot_wider(names_from = WaterBody, values_from = n)
+    dat |> filter(SpawningYear == min(SpawningYear)) |> group_by(WaterBody) |> count(Param, Age) |> pivot_wider(names_from = Age, values_from = n)
 
 #---------------------------------------------------------------------------------------------------------- -
 # Generate rollup/combined estimates of abundance using log-normal moment matching                       ----
@@ -98,14 +104,14 @@
 # Step 3: Specify location, file path, and name of output folder and file name
   loc_output_files<-c("Teams") # Specify the location (loc) of outputs: enter either "Local: (i.e., stored locally within this project) or "Teams"  
   wd_output_files <-c("T:/DFW-Team FP Lewis River M&E - General/Analysis/Lewis tule rollup/output") # Specify working directory for output files
-  output_file_name<-c("TEST_Lewis_tule_rollup_2022-2023_for_SPi") #specify name of output file (leave off suffix; .xlsx)
+  output_file_name<-c("Lewis_tule_rollup_2013-2023_for_SPi") #specify name of output file (leave off suffix; .xlsx)
     ## NOTE: if "loc_" is Teams, you must provide the full file path up to the top-level outputs folder which should be name "project_outputs/" & already exist 
     ## NOTE: if "loc_" is Local, leave "wd_output_files" blank i.e., c()   
 
 # Step 4: Specify desired meta-data (will attach this information in a seperate Excel sheet)  
   output_meta_data<-
     list(
-      data_generated = as.character(Sys.Date()),
+      date_estimates_generated = as.character(Sys.Date()),
       estimate_values = "means"
     )
   
