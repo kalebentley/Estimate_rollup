@@ -22,7 +22,7 @@
   wd_data_files   <-c("T:/DFW-Team FP Lewis River M&E - General/Analysis/Lewis tule rollup/data") 
       ## NOTE: if "loc_" is Teams, you must provide the full file path to the data folder 
       ## NOTE: if "loc_" is Local, provide the file path starting at the folder name of where the data are stored within this project" 
-  file_name<-c("data_Lewis_tule_abundance_by_year_pop_origin_age_excluding_jacks.csv") 
+  file_name<-c("data_Lewis_tule_abundance_by_year_pop_origin_age_excluding_jacks_2023-10-23.csv") 
       ## NOTE file must be stored as a .csv and file name must include the .csv suffix
 
 #---------------------------------------------------------------------------------------------------------- -
@@ -77,7 +77,11 @@
     ContactPerLast_rollup<-c("Bentley")
     ContactPerPhone_rollup<-c("303-550-3004")
     ContactPerEmail_rollup<-c("kale.bentley@dfw.wa.gov")
-  
+ 
+# NOTE - need to update output to include "LowerLimitXXX" and "UpperLimitXXX" (e.g.,NOSAEJUpperLimit) columns as well as "XXXAlpha" (e.g., NOSAIJAlpha); plus comments to denote values are means
+# NOTE 2 - to be consistent, probably should switch values to medians as opposed to mean (but check with Thomas first to see which is preferred for SOS or other analysis using SPI data sets) 
+    
+        
 # Step 2: format est_rollup and create SPi_format
     SPi_format<-  
       est_rollup |> 
@@ -104,7 +108,7 @@
 # Step 3: Specify location, file path, and name of output folder and file name
   loc_output_files<-c("Teams") # Specify the location (loc) of outputs: enter either "Local: (i.e., stored locally within this project) or "Teams"  
   wd_output_files <-c("T:/DFW-Team FP Lewis River M&E - General/Analysis/Lewis tule rollup/output") # Specify working directory for output files
-  output_file_name<-c("Lewis_tule_rollup_2013-2023_for_SPi") #specify name of output file (leave off suffix; .xlsx)
+  output_file_name<-c("Lewis_tule_rollup_2013-2023_for_SPi_2023-10-23") #specify name of output file (leave off suffix; .xlsx)
     ## NOTE: if "loc_" is Teams, you must provide the full file path up to the top-level outputs folder which should be name "project_outputs/" & already exist 
     ## NOTE: if "loc_" is Local, leave "wd_output_files" blank i.e., c()   
 
