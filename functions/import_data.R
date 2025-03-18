@@ -1,7 +1,7 @@
 # Import master data file that contains estimates of abundance (mean, sd) excluding jacks (age-2) by year, param (NOR, HOR, total), and sub-basin/pop
-import_data<-function(loc, wd, file_name){
+import_data<-function(wd, file_name){
 
-full_fp<-if_else(loc == "Teams", paste(wd, file_name, sep="/"), paste(here::here(), wd, file_name, sep="/"))  
+full_fp<-glue("{wd}/{file_name}")
   
 # Step 1: Read the CSV file as all characters
 initial_data <- 
