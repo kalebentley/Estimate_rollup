@@ -9,7 +9,7 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
     tryCatch({
       filter_age <- match.arg(filter_age, choices = valid_choices_filter_age, several.ok = TRUE)
     }, error = function(e) {
-      stop("**ERROR - Invalid option entered for argument add_param.  Valid options are NULL, c('pHOS'), c('pAge'), or c('pHOS','pAge').**")
+      stop("**ERROR - Invalid option entered for argument add_param.  Valid options are NULL, c('age'), c('total'), or c('age','total').**")
     })
 
   # Define valid choices for add_param
@@ -40,7 +40,7 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
     handle_error("**ERROR: Something went wrong with filtering the data by age prior to L")
   } 
   
-  summarized_data <- 
+  summarized_abund_data <- 
     data_filt %>%
     group_by(across(all_of(group_cols))) %>%
     #summarize(mean_summary = sum(mean, na.rm = TRUE), .groups = 'drop')
@@ -72,11 +72,13 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
           str_detect(Param, "EJ|ej") ~ "pHOSej",
           str_detect(Param, "IJ|ij") ~ "pHOSij",
           TRUE ~ "pHOS"
-        )
+        ), 
+        Age = "Total"
       ) |> 
       select(-mean_hos, -mean_tsa)
     
-    summarized_data <- bind_rows(summarized_data, pHOS_summary)
+  }else{
+    pHOS_summary<-c() 
   }
   
   if ("pAge" %in% add_param) {
@@ -97,9 +99,9 @@ generate_rollup_estimates <- function(data, summary_cols, filter_age = c("age", 
              Age = NA
              ) %>%
       select(-mean_age, -total_mean)
-    
-    summarized_data <- bind_rows(summarized_data, pAge_summary)
+  }else{
+    pAge_summary<-c()
   }
   
-  return(summarized_data)
+  return(list(abund = summarized_abund_data, prop=bind_rows(pHOS_summary, pAge_summary)))
 }
