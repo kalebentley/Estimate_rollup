@@ -14,6 +14,7 @@ if (all("Age" %in% colnames(data) & any(filter_age %in% "total"))) {
     summarise(
       HOSA_NOSA_Mean = sum(Mean[grepl("HOSA|NOSA", Param)]),
       TSA_Mean = sum(Mean[grepl("TSA", Param)]),
+      diff_Mean = TSA_Mean - HOSA_NOSA_Mean,
       HOSA_NOSA_equals_TSA = HOSA_NOSA_Mean == TSA_Mean,
       .groups = 'drop'
     )
@@ -23,6 +24,7 @@ if (all("Age" %in% colnames(data) & any(filter_age %in% "total"))) {
     summarise(
       HOSA_NOSA_Mean = sum(Mean[grepl("HOSA|NOSA", Param)]),
       TSA_Mean = sum(Mean[grepl("TSA", Param)]),
+      diff_Mean = TSA_Mean - HOSA_NOSA_Mean,
       HOSA_NOSA_equals_TSA = HOSA_NOSA_Mean == TSA_Mean,
       .groups = 'drop'
     )
