@@ -58,67 +58,59 @@ QAQC_HOSA_NOSA_TSA(data = est_rollup$abund)
 
 #------------------------------------------------------------------------------------------------------------------- -  
 # **OPTIONAL** - Format "est_rollup" to match SPi formatting and generate an Excel file of the formatted dataset  ----
-#------------------------------------------------------------------------------------------------------------------- -   
-# Step 1: Organize output to match SPi formatting
-  # part A: define values for various SPi columns
-    PopFit_rollup<- c("Same")
-    PopFit_Notes_rollup <-c("combined NF, EF, and Cedar Creek estimates by Spawning Year and Origin")
-    waterbody_name_rollup <-c("Lewis River")
-    ContactAgency_rollup <- c("Washington Department of Fish and Wildlife")
-    BestValue_rollup <- c("Yes")
-    ProtMethDoc_rollup <-c("https://github.com/kalebentley/Estimate_rollup")
-    ContactPerFirst_rollup<-c("Kale")
-    ContactPerLast_rollup<-c("Bentley")
-    ContactPerPhone_rollup<-c("303-550-3004")
-    ContactPerEmail_rollup<-c("kale.bentley@dfw.wa.gov")
- 
-# NOTE - need to update output to include "LowerLimitXXX" and "UpperLimitXXX" (e.g.,NOSAEJUpperLimit) columns as well as "XXXAlpha" (e.g., NOSAIJAlpha); plus comments to denote values are means
-# NOTE 2 - to be consistent, probably should switch values to medians as opposed to mean (but check with Thomas first to see which is preferred for SOS or other analysis using SPI data sets) 
-    
-        
-# Step 2: format est_rollup and create SPi_format
-    SPi_format<-  
-      est_rollup$abund |> 
-      mutate(
-        PopFit = PopFit_rollup,
-        PopFitNotes = PopFit_Notes_rollup,
-        WaterBody = waterbody_name_rollup,
-        ContactAgency = ContactAgency_rollup,
-        BestValue = BestValue_rollup
-      ) |> 
-      filter(Age == "Total" | is.na(Age) == TRUE) |> 
-      select(any_of(summary_cols), PopFit, PopFitNotes, WaterBody, ContactAgency, BestValue, Mean) |> 
-      pivot_wider(names_from = "Param", values_from = Mean) |> 
-      mutate(
-        ProtMethDocumentation = ProtMethDoc_rollup,
-        ContactPersonFirst = ContactPerFirst_rollup,
-        ContactPersonLast = ContactPerLast_rollup,
-        ContactPhone = ContactPerPhone_rollup, 
-        ContactEmail = ContactPerEmail_rollup
-      )
-  
-    SPi_format |> print(n = Inf, width=Inf)
-    
-# Step 3: Specify location, file path, and name of output folder and file name
-  loc_output_files<-c("Teams") # Specify the location (loc) of outputs: enter either "Local: (i.e., stored locally within this project) or "Teams"  
-  wd_output_files <-c("T:/DFW-Team FP Lewis River M&E - General/Analysis/Lewis tule rollup/output") # Specify working directory for output files
-  output_file_name<-c("Lewis_tule_rollup_2013-2023_for_SPi_2023-10-23") #specify name of output file (leave off suffix; .xlsx)
-    ## NOTE: if "loc_" is Teams, you must provide the full file path up to the top-level outputs folder which should be name "project_outputs/" & already exist 
-    ## NOTE: if "loc_" is Local, leave "wd_output_files" blank i.e., c()   
+#------------------------------------------------------------------------------------------------------------------- - 
+# Step #1 - review and update object/arguments that may change year-to-year
+ui_central_tendency_metric = "Median" # specify "Mean" or "Median"
+ui_alpha = 0.05 # default 0.05 (assuming summary stats reporting 95% CIs); adjust as needed
 
-# Step 4: Specify desired meta-data (will attach this information in a seperate Excel sheet)  
-  output_meta_data<-
-    list(
-      date_estimates_generated = as.character(Sys.Date()),
-      estimate_values = "means"
-    )
-  
-#Step 5: Save output as Excel file 
-  generate_output_files(
-    loc = loc_output_files
-    , wd = wd_output_files
-    , file_name = output_file_name
-    , data = SPi_format
-    , meta = output_meta_data
+# Step 2: format est_rollup and create SPi_format
+SPi_format_LewisTules_rollup<- 
+  format_estimates_SPi(
+    abundance_estimates = est_rollup$abund
+    , proportional_estimates = est_rollup$prop
+    , central_tendency_metric = ui_central_tendency_metric
+    , alpha = ui_alpha
+    
+    , species = "Chinook salmon"
+    , run = c("Fall")
+    , CommonPopName = "Lewis River Fall (Tule) Chinook" 
+    , RecoveryDomain = "Willamette/Lower Columbia"
+    , ESU_DPS = "Salmon, Chinook (Lower Columbia River ESU)"
+    , MajorPopGroup = "Cascade"
+    , PopID = "217" 
+    
+    , PopFit_rollup= c("Same")
+    , PopFit_Notes_rollup = c("combined NF, EF, and Cedar Creek estimates by Spawning Year and Origin")
+    , EstimateType = "NOSA"
+    , waterbody_name_rollup = c("Lewis River")
+    , BestValue_rollup = c("Yes")
+    
+    , ProtMethURL = c("https://github.com/kalebentley/Carcass_M-R")
+    , ProtMethDoc_rollup = c("https://wdfw.wa.gov/publications/02004")
+    , Comments = glue("Reported abundance estimates are all {ui_central_tendency_metric}s except for Limits; proportional estimates (e.g., pHOS) are means")
+    , ContactAgency_rollup = c("Washington Department of Fish and Wildlife")
+    , ContactPerFirst_rollup = c("Kale")
+    , ContactPerLast_rollup = c("Bentley")
+    , ContactPerPhone_rollup = c("303-550-3004")
+    , ContactPerEmail_rollup = c("kale.bentley@dfw.wa.gov") 
   )
+
+# preview summarized results (transposed for viewing ease)
+if(length(unique(SPi_format_LewisTules_rollup$SpawningYear))>1){
+  SPi_format_LewisTules_rollup |> print(width=Inf, n=Inf)
+}else{
+  
+  t(SPi_format_LewisTules_rollup) }
+
+# Step #3: Save output as Excel file
+generate_SPi_output_file(
+  wd = glue("T:/DFW-Team FP Lewis River M&E - General/Analysis/Lewis tule rollup/output")      # Specify working directory for output files
+  , file_name = glue("Lewis_tule_rollup_2013-2023_for_SPi")
+  , data = rbind(SPi_format_LewisTules_rollup)
+  , meta = 
+    list(
+      date_estimates_generated = as.character(Sys.Date())
+      , central_tendency_metric = ui_central_tendency_metric
+    )
+)
   
